@@ -1,0 +1,45 @@
+# =============================================================================
+# tag_map.yaml  --  SINGLE SOURCE OF TRUTH for the room geometry and tag layout.
+#
+#   * generate_world.py reads this file and emits worlds/room.sdf, so the
+#     simulated world and the filter's known map can never drift apart.
+#   * particle_filter_node.py / sim_detector_node.py load the same tag poses as
+#     the filter's known tag map.
+#
+# All 8 tags share the SAME AprilTag ID (tag36h11, id 0) and the SAME physical
+# size -- exactly the ambiguity the project is about: a detection tells you a
+# tag is there, not WHICH tag.
+#
+# World frame: right-handed, origin at a room corner, z up. The room interior
+# is the rectangle [0, size_x] x [0, size_y]. Distances in meters, angles in
+# degrees (converted to radians on load).
+# =============================================================================
+
+room:
+  size_x: 8.0          # interior length along +x
+  size_y: 6.0          # interior length along +y
+  wall_height: 1.5
+  wall_thickness: 0.10
+
+tag:
+  family: tag36h11
+  id: 0
+  size: 0.40           # side length of the tag's black square; identical for all tags
+  mount_height: 0.55   # z of every tag's center
+
+# Tag poses on the interior wall faces. (x, y) is the world position of the tag
+# center; normal_deg is the direction the tag FACE points into the room.
+# These positions were chosen by a search that MAXIMIZES asymmetry: under every
+# room symmetry (180-deg rotation, mirror about x=4, mirror about y=3) at least
+# one tag lands >=5.2 m from any equally-oriented tag, so NO self-consistent
+# "ghost" pose exists. That strong asymmetry is what lets the filter converge to
+# a single hypothesis instead of getting stuck on a rotated/mirrored copy.
+tags:
+  - {x: 0.83, y: 0.06, normal_deg:  90}    # south wall (y=0), faces +y
+  - {x: 7.13, y: 0.06, normal_deg:  90}
+  - {x: 0.70, y: 5.94, normal_deg: -90}    # north wall (y=6), faces -y
+  - {x: 1.93, y: 5.94, normal_deg: -90}
+  - {x: 0.06, y: 1.38, normal_deg:   0}    # west wall (x=0), faces +x
+  - {x: 0.06, y: 4.86, normal_deg:   0}
+  - {x: 7.94, y: 1.66, normal_deg: 180}    # east wall (x=8), faces -x
+  - {x: 7.94, y: 5.01, normal_deg: 180}

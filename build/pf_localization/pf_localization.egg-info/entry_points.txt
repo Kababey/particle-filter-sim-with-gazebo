@@ -1,0 +1,7 @@
+[console_scripts]
+generate_world = pf_localization.generate_world:main
+odom_noise_node = pf_localization.odom_noise_node:main
+particle_filter_node = pf_localization.particle_filter_node:main
+sim_detector_node = pf_localization.sim_detector_node:main
+tag_detector_node = pf_localization.tag_detector_node:main
+viz_node = pf_localization.viz_node:main

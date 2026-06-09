@@ -1,0 +1,116 @@
+# =============================================================================
+# filter_params.yaml -- runtime parameters for the particle filter pipeline.
+# Loaded by bringup.launch.py and handed to each node by its own namespace.
+#
+# NOTE: the sensor field-of-view used by the filter's measurement model MUST
+# match the detector's FOV so that the filter's "which tags could a particle
+# have seen?" gating is consistent with how detections are actually produced.
+# The shared values are: max_range, hfov_rad, max_view_angle_deg.
+# =============================================================================
+
+particle_filter_node:
+  ros__parameters:
+    use_sim_time: true
+
+    # --- particle set ---
+    num_particles: 6000
+    init_mode: "global"          # "global" (uniform over room) or "gaussian"
+
+    # --- odometry motion model (Thrun, sample_motion_model_odometry) ---
+    # variances are alpha * (squared rotation/translation increments)
+    alpha1: 0.08                 # rot   noise from rotation
+    alpha2: 0.02                 # rot   noise from translation
+    alpha3: 0.06                 # trans noise from translation
+    alpha4: 0.02                 # trans noise from rotation
+    min_motion_trans: 0.002      # skip prediction below this motion (m)
+    min_motion_rot: 0.002        # skip prediction below this motion (rad)
+
+    # --- multi-hypothesis measurement model ---
+    sigma_range: 0.20            # m   (comfortably above the detector's true noise)
+    sigma_bearing: 0.10          # rad
+    z_clutter: 0.05              # uniform clutter weight added per detection
+    max_range: 8.0               # m   (shared with detector)
+    hfov_rad: 1.50               # rad (shared with detector)
+    max_view_angle_deg: 75.0     # tag only visible if view angle < this (shared)
+
+    # --- resampling + Augmented-MCL adaptive injection ---
+    ess_ratio_threshold: 0.65     # resample when ESS/N falls below this
+    random_inject_frac: 0.05     # CAP on adaptive injection. Only fires when the
+                                 # filter is genuinely stuck on a wrong lock (huge
+                                 # likelihood drop); a converged cloud never injects,
+                                 # so it does not "re-guess" particles.
+    w_slow_alpha: 0.01           # slow EMA rate of the mean measurement likelihood
+    w_fast_alpha: 0.06           # fast EMA rate; inject when fast < slow (lower =
+                                 # only SUSTAINED likelihood drops trigger injection,
+                                 # so transient ambiguity does not cause wobble)
+    inject_threshold: 0.6      # deadband: inject ONLY when the likelihood has
+                                 # collapsed by > this fraction (a stuck wrong lock
+                                 # or a kidnap, drop ~0.95). Moderate ambiguity dips
+                                 # are below this, so a converged cloud stays put and
+                                 # does not "re-guess" particles.
+
+    # --- map constraint ---
+    wall_margin: 0.15            # robot centre must stay >= this far inside the walls;
+                                 # particles that leave the room are resampled back in
+
+    # --- frames ---
+    map_frame: "map"
+
+    # publish the filter's map->odom correction on /tf (AMCL-style)
+    publish_tf: false
+
+sim_detector_node:
+  ros__parameters:
+    use_sim_time: true
+    rate_hz: 10.0
+    max_range: 8.0               # m   (shared with filter)
+    hfov_rad: 1.50               # rad (shared with filter)
+    max_view_angle_deg: 75.0     # (shared with filter)
+    sigma_range: 0.12            # true measurement noise (<= filter's assumed sigma)
+    sigma_bearing: 0.05
+    detection_prob: 0.95         # per-visible-tag detection probability (dropout)
+    camera_x: 0.15               # camera mount offset on base_link (forward)
+
+tag_detector_node:
+  ros__parameters:
+    use_sim_time: true
+    image_topic: "/camera/image"
+    info_topic: "/camera/camera_info"
+    tag_family: "tag36h11"
+    tag_size: 0.40               # the BLACK tag size (= tag.size in tag_map.yaml);
+                                 # the plaque is rendered 1.2x larger for the quiet
+                                 # zone so the black square is exactly this size.
+    camera_x: 0.18               # camera mount offset on base_link (matches model.sdf)
+    camera_z: 0.20               # camera mount height on base_link
+    max_range: 8.0
+    decimate: 1.0                # quad decimation (1.0 = full res, higher = faster)
+    tag_id: 0                    # label drawn on detections (all tags share this id)
+    show_window: true            # pop a separate window showing the annotated camera
+
+odom_noise_node:
+  ros__parameters:
+    use_sim_time: true
+    in_topic: "/odom"
+    out_topic: "/odom_noisy"
+    trans_scale: 1.03            # systematic odometer scale error (drift)
+    rot_scale: 1.0
+    rot_per_trans: 0.012         # systematic heading drift per meter (rad/m)
+    trans_noise_per_m: 0.03      # random walk std (m per sqrt(m))
+    rot_noise_per_m: 0.015       # rad per sqrt(m)
+    rot_noise_per_rad: 0.03      # rad per sqrt(rad)
+    seed: 0
+
+viz_node:
+  ros__parameters:
+    use_sim_time: true
+    map_frame: "map"
+    draw_ground_truth: true
+    trail_seconds: 20.0          # rolling trajectory trail length [s] (0 = full path)
+    trail_max_jump: 0.6          # wipe the trail if a point jumps > this [m]
+                                 # (anti-"splash": stops long lines when the
+                                 # estimate hops between clusters)
+    # camera visibility used to highlight which tags are in view (match detector)
+    hfov_rad: 1.50
+    max_range: 8.0
+    max_view_angle_deg: 75.0
+    camera_x: 0.18

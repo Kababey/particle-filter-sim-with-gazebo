@@ -1,0 +1,135 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded: ~
+    SplitterRatio: 0.5
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Name: root
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Color: 90; 90; 95
+      Cell Size: 1
+      Plane Cell Count: 12
+      Reference Frame: map
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Tags & Room
+      Enabled: true
+      Namespaces:
+        {}
+      Topic:
+        Value: /viz/static
+        Depth: 5
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Particle Cloud
+      Enabled: true
+      Namespaces:
+        {}
+      Topic:
+        Value: /pf/particle_markers
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Best Effort
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Robot Poses
+      Enabled: true
+      Namespaces:
+        {}
+      Topic:
+        Value: /viz/robots
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Tags In View
+      Enabled: true
+      Namespaces:
+        {}
+      Topic:
+        Value: /viz/visible_tags
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+      Value: true
+    - Class: rviz_default_plugins/Path
+      Name: Odometry-only Path
+      Enabled: true
+      Color: 60; 130; 255
+      Line Style: Lines
+      Buffer Length: 1
+      Topic:
+        Value: /pf/path_odom
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+      Value: true
+    - Class: rviz_default_plugins/Path
+      Name: Filter Estimate Path
+      Enabled: true
+      Color: 255; 40; 0
+      Line Style: Lines
+      Buffer Length: 1
+      Topic:
+        Value: /pf/path_estimate
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+      Value: true
+    - Class: rviz_default_plugins/Path
+      Name: Ground Truth Path
+      Enabled: true
+      Color: 30; 200; 30
+      Line Style: Lines
+      Buffer Length: 1
+      Topic:
+        Value: /pf/path_ground_truth
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+      Value: true
+    - Class: rviz_default_plugins/Camera
+      Name: Robot Camera
+      Enabled: false
+      Topic:
+        Value: /camera
+        Depth: 5
+        Durability Policy: Volatile
+        Reliability Policy: Best Effort
+      Value: false
+  Global Options:
+    Background Color: 38; 40; 45
+    Fixed Frame: map
+    Frame Rate: 30
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Name: Top Down (map)
+      Target Frame: map
+      Scale: 70
+      X: 4.0
+      Y: 3.0
+      Angle: 0
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 900
+  Width: 1500
+  Hide Left Dock: false
+  Hide Right Dock: true

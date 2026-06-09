@@ -1,0 +1,8 @@
+# Python package NOT provided by apt/ROS. Installed by setup_env.sh with
+#   pip install --break-system-packages --no-deps pupil-apriltags
+# IMPORTANT: --no-deps is required so pip does not try to upgrade numpy to 2.x,
+# which would break ROS / cv_bridge (built against the Debian numpy 1.26).
+# numpy / scipy / opencv / pyyaml all come from apt (python3-numpy, python3-scipy,
+# python3-opencv, python3-yaml). The AprilTag *texture* is generated with the apt
+# OpenCV AprilTag dictionary (cv2.aruco.DICT_APRILTAG_36h11), so no extra deps.
+pupil-apriltags>=1.0.4   # AprilTag detector used by tag_detector_node

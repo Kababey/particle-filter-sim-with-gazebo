@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: pf-localization
+Version: 1.0.0
+Summary: Multi-hypothesis particle filter localization with AR tags in Gazebo.
+Maintainer: eg
+Maintainer-email: kababey111@gmail.com
+License: MIT
