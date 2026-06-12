@@ -1,3 +1,32 @@
+# 🎯 Monte Carlo Localization
+
+Particle-filter localization in environments with repeated and visually ambiguous landmarks.
+
+## 🤖 Real Duckiebot Implementation
+
+The particle filter was also implemented and tested on a physical Duckiebot using wheel-encoder odometry and camera-based ArUco landmark observations.
+
+<p align="center">
+  <img src="visuals/MonteCarloDemo.gif" alt="Real Duckiebot Monte Carlo Localization Demo" width="850">
+</p>
+
+*Real Duckiebot localization using odometry updates, visual landmark measurements, particle weighting, and adaptive resampling.*
+
+➡️ **[View the Real Duckiebot Implementation Repository](https://github.com/somanst/Robotics_Projects/tree/main/Monte_Carlo_Localization)**
+
+---
+
+## 🖥️ Simulation Implementation
+
+This repository contains the ROS 2 and Gazebo simulation implementation of the Monte Carlo Localization system.
+
+<p align="center">
+  <img src="visuals/simulationDemo.gif" alt="Monte Carlo Localization Simulation Demo" width="850">
+</p>
+
+*In the simulation, particles gradually converge around the robot pose as odometry and repeated landmark observations are processed.*
+
+
 # Particle Filter Localization with AR Tags (Gazebo, ROS 2)
 
 Monte-Carlo localization of a teleoperated mobile robot in a simulated room. The
